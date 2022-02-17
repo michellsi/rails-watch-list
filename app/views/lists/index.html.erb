@@ -1,0 +1,13 @@
+<%= render 'banner' %>
+
+<div class="container m-3 p-3">
+  <h2>My movie lists <%= link_to "Create a movie list", new_list_path, class: "btn btn-dark"  %> </h2>
+
+    <div class="cards">
+      <% @lists.each do |list| %>
+          <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=856&q=80)">
+             <%= link_to list.name, list_path(list), class: "btn btn-light" %>
+          </div>
+      <% end  %>
+    </div>
+</div>

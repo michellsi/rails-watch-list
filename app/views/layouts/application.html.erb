@@ -8,9 +8,11 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script src="https://kit.fontawesome.com/eeef53a465.js" crossorigin="anonymous"></script>
   </head>
 
   <body>
+  <%= render "navbar" %>
     <%= yield %>
   </body>
 </html>
