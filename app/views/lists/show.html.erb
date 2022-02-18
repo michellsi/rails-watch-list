@@ -1,4 +1,4 @@
-<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(https://img.freepik.com/free-vector/living-room-interior-with-rear-view-sofa_107791-3689.jpg?t=st=1645115951~exp=1645116551~hmac=9e6864a49981fa28055695274ae97b96e1cb044b0fea7c4b8d461c20ffd420af&w=1380);">
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= cl_image_path @list.photo.key, crop: :fit %>');">
   <div class="banner-container">
     <h1 style="text-align: center;"><%= @list.name %></h1>
   <div class="delete-button"><%= link_to "Delete list", list_path(@list), class: "btn btn-light", method: :delete, data: { confirm: "Are you sure you want to delete this list?"} %></div>

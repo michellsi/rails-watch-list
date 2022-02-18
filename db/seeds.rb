@@ -6,14 +6,66 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+require 'nokogiri' # gem to handle html
+require 'open-uri' # gem to open websites
+
+List.destroy_all
 Movie.destroy_all
 
-Movie.create(title: "Wonder Woman 1984", overview: "Wonder Woman comes into conflict with the Soviet Union during the Cold War in the 1980s", poster_url: "https://image.tmdb.org/t/p/original/8UlWHLMpgZm9bx6QYh0NFoq67TZ.jpg", rating: 6.9)
-Movie.create(title: "The Shawshank Redemption", overview: "Framed in the 1940s for double murder, upstanding banker Andy Dufresne begins a new life at the Shawshank prison", poster_url: "https://image.tmdb.org/t/p/original/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg", rating: 8.7)
-Movie.create(title: "Titanic", overview: "101-year-old Rose DeWitt Bukater tells the story of her life aboard the Titanic.", poster_url: "https://image.tmdb.org/t/p/original/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg", rating: 7.9)
-Movie.create(title: "Ocean's Eight", overview: "Debbie Ocean, a criminal mastermind, gathers a crew of female thieves to pull off the heist of the century.", poster_url: "https://image.tmdb.org/t/p/original/MvYpKlpFukTivnlBhizGbkAe3v.jpg", rating: 7.0)
+def fetch_movies_urls(x)
+  # define the link where to fetch info from
+  imdb_top_movies_url = 'https://www.imdb.com/chart/top'
+  html_file = URI.open(imdb_top_movies_url, 'Accept-Language' => 'en-US').read
+  # open that link and read the html
+  html_doc = Nokogiri::HTML(html_file)
+  css_selector = '.lister-list td.titleColumn a'
 
-List.create(name: "Classic Movies")
-List.create(name: "Romantic Movies")
+  # search for the href of the first five movies
+  result = []
+  html_doc.search(css_selector).first(x).each do |element|
+    # p element.text.strip
+    href = element.attribute('href').value
+    url = "http://www.imdb.com#{href}"
+    result << url
+  end
 
-puts "Finished!"
+  # return an array with the first 5 urls
+  return result
+end
+
+# MAIN CSS SELECTORS -
+# Tags / Classes      / IDs
+# h1   / .btn-primary / #header
+
+def scrape_movie(movie_url)
+  # we open the url
+  html_file = URI.open(movie_url, 'Accept-Language' => 'en-US').read
+  # we create the html doc
+  html_doc = Nokogiri::HTML(html_file)
+  # we find the right css for each of the criteria
+  title = html_doc.search('h1')
+  title = title.text.strip unless title.nil?
+  storyline = html_doc.search("p[class*='GenresAndPlot__Plot'] span").first
+  storyline = storyline.text.strip unless storyline.nil?
+  poster_url = html_doc.search('.ipc-media img').first.attribute('src')
+  poster_url = poster_url.value unless poster_url.nil?
+  rating = html_doc.search('.ipc-button__text span').first
+  rating = rating.text unless rating.nil?
+
+  {
+    title: title,
+    overview: storyline,
+    poster_url: poster_url,
+    rating: rating
+  }
+end
+
+puts "Fetching movies urls"
+top10_movie_urls = fetch_movies_urls(100)
+
+top10_movie_urls.each do |movie_url|
+  puts "Creating #{movie_url}"
+  Movie.create scrape_movie(movie_url)
+end
+
+puts "All movies created!"
