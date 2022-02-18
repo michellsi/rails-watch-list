@@ -49,7 +49,7 @@
 <div class="review-form-container col-6 p-3">
 <div><%= simple_form_for [ @list, @review ] do |f| %>
   <%= f.input :content, label: "Leave your review here"  %>
-  <%= f.number_field :rating, label: "Rating"  %>
+  <%= f.input :rating, collection: 0..5 %>
   <%= f.submit "Submit review", class: "btn btn-primary btn-sm" %>
 <% end %></div>
 </div>
