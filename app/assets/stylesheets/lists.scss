@@ -25,11 +25,23 @@
 }
 
 .movie-container {
-  width: 700px;
+  width: 800px;
   margin: 0 auto;
   // display: flex;
   // height: 100%;
   // justify-content: space-around;
+}
+
+.review-form-container {
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.review-container {
+  display: flex;
+  width: 700px;
+  margin: 0 auto;
 }
 
 .card-trip {

@@ -30,3 +30,28 @@
       <% end  %>
     </div>
 </div>
+
+
+<div class="container border-top border-3 mb-5">
+<div class="row mt-4">
+
+<div class="col-6 p-3">
+<h2>Reviews</h2>
+<ul class="list-group list-group-flush">
+<% @list.reviews.each do |r| %>
+
+  <li class="list-group-item bg-transparent"><%= r.content %> <%= r.rating %> / 5 <%= image_tag "269.png" %></li>
+
+<% end %>
+</ul>
+</div>
+
+<div class="review-form-container col-6 p-3">
+<div><%= simple_form_for [ @list, @review ] do |f| %>
+  <%= f.input :content, label: "Leave your review here"  %>
+  <%= f.number_field :rating, label: "Rating"  %>
+  <%= f.submit "Submit review", class: "btn btn-primary btn-sm" %>
+<% end %></div>
+</div>
+</div>
+</div>
